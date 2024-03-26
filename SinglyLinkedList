@@ -1,0 +1,307 @@
+package singleLinkedList;
+
+public class SinglyLinkedList {
+	
+	private ListNode head;
+	
+	private static class ListNode{
+		private int data;
+		private ListNode next;
+		
+		public ListNode(int data) {
+			this.data = data;
+			this.next = null;
+		}
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		SinglyLinkedList sll = new SinglyLinkedList();
+		sll.head = new ListNode(10);
+		ListNode firstNode = new ListNode(20);
+		ListNode secondNode = new ListNode(30);
+		ListNode thirdNode = new ListNode(40);
+		
+		//connection
+		sll.head.next = firstNode;
+		firstNode.next = secondNode;
+		secondNode.next = thirdNode;
+		
+		//print all data inside list
+		sll.display();
+		
+		//print length of list
+		int len = sll.sllLength();
+		System.out.println(len);
+		
+		//insert node from begininng
+		sll.insertBegin(5);
+		sll.display();
+		
+		//insert node in last
+		sll.insertLast(50);
+		sll.display();
+		
+		//Insert position
+		sll.insertPos(25,4);
+		sll.display();
+		
+		//Delete First Node
+		System.out.println(sll.deleteFirst().data);
+		sll.display();
+		
+		//Delete Last Node
+		System.out.println(sll.deleteLast().data);
+		sll.display();
+		
+		//Delete position node
+		System.out.println(sll.deletePosition(1).data);
+		sll.display();
+		
+		//Find element present or not
+		boolean res = sll.find(35);
+		if(res == true)
+			System.out.println("Element is found");
+		else
+			System.out.println("Element is not found");
+		
+		//Reverse a List
+		sll.reverseList();
+		sll.display();
+		
+		
+		sll.insertBegin(10);
+		sll.display();
+		
+		//find Middle of the node
+		System.out.println(sll.findMiddle().data);
+		
+		//find nth last node
+		System.out.println(sll.findNthLast(2).data);
+		
+		//find loop present in list
+		sll.createLoopList();
+		System.out.println(sll.findLoop());
+		
+		
+	}
+	
+	 private boolean findLoop() {
+		// TODO Auto-generated method stub
+		 ListNode slowPtr = head;
+		 ListNode fastPtr = head;
+		 while(fastPtr != null && fastPtr.next != null) {
+			 fastPtr = fastPtr.next.next;
+			 slowPtr = slowPtr.next;
+			 if(fastPtr == slowPtr) {
+				 return true;
+			 }
+		 }
+		 return false;
+		
+	}
+
+	private void createLoopList() {
+		// TODO Auto-generated method stub
+		ListNode first = new ListNode(1);
+		ListNode second = new ListNode(2);
+		ListNode third = new ListNode(3);
+		ListNode fourth = new ListNode(4);
+		ListNode fivth = new ListNode(5);
+		ListNode sixth = new ListNode(6);
+		
+		head = first;
+		first.next = second;
+		second.next = third;
+		third.next = fourth;
+		fourth.next = fivth;
+		fivth.next = third;
+		
+	}
+
+	private ListNode findNthLast(int val) {
+		// TODO Auto-generated method stub
+		 if(head == null) {
+			 return null;
+		 }
+		ListNode current = head;
+		int pos = sllLength()-(val-1);
+		int count=1;
+		while(count<pos) {
+			current = current.next;
+			count++;
+		}
+		
+		System.out.print("Nth Last Node : ");
+		return current;
+	}
+
+	private ListNode findMiddle() {
+		// TODO Auto-generated method stub
+		 
+		if(head == null)
+			return null;
+		ListNode slowPtr = head;
+		ListNode fastPtr = head;
+		
+		while(fastPtr != null && fastPtr.next != null) {
+			slowPtr = slowPtr.next;
+			fastPtr = fastPtr.next.next;
+			System.out.print("Middle of the Node : ");
+			//System.out.println(fastPtr.data);
+		}
+		return slowPtr;
+	}
+
+	public void reverseList() {
+	        ListNode current = head;
+	        ListNode previous = null;
+	        ListNode next = null;
+	        while (current != null) {
+	            next = current.next;
+	            current.next = previous;
+	            previous = current;
+	            current = next;
+	        }
+	        head = previous;
+	        System.out.println("Reverse Successful");
+	        //return previous;
+	    }
+
+	private boolean find(int searchKey) {
+		// TODO Auto-generated method stub
+		ListNode current = head;
+		while(current != null) {
+			if(current.data == searchKey) {
+				return true;
+			}
+			current = current.next;
+		}
+		return false;
+	}
+
+	private ListNode deletePosition(int pos) {
+		
+		ListNode current = head;
+		if(pos == 1) {
+			head = head.next;
+			System.out.print("Node Delete Successful : ");
+			return current;
+		}
+		ListNode previous = head;
+		int count = 1;
+		while(count<pos-1) {
+			previous = previous.next;
+			count++;
+		}
+		current = previous.next;
+		previous.next = current.next;
+		
+		System.out.print("Node Delete Successful : ");
+		return current;
+	}
+
+	private ListNode deleteLast() {
+		// TODO Auto-generated method stub
+		if(head == null || head.next == null) {
+			return head;
+		}
+		ListNode current = head;
+		ListNode previous = null;
+		while(current.next != null) {
+			previous = current;
+			current = current.next;
+		}
+		previous.next = null;
+		System.out.print("Last Node Delete Successful : ");
+		return current;
+	}
+
+	private ListNode deleteFirst() {
+		// TODO Auto-generated method stub
+		if(head == null) {
+			return null;
+		}
+		ListNode temp = head;
+		head = head.next;
+		temp.next = null;
+		
+		System.out.print("First Node Delete Successful : ");
+		return temp;
+		
+		
+	}
+
+	private void insertPos(int data, int position) {
+		ListNode newNode = new ListNode(data);
+		if(position == 1) {
+			newNode.next = head;
+			head = newNode;
+		}
+		else {
+		ListNode previous = head;
+		int count = 1;
+		while(count<position-1) {
+			previous = previous.next;
+			count++;
+		}
+		ListNode current = previous.next;
+		newNode.next = current;
+		previous.next = newNode;
+		
+		}
+	}
+
+	private void insertLast(int i) {
+		
+		ListNode newNode = new ListNode(i);
+		if(head == null) {
+			head = newNode;
+			return;
+		}
+		ListNode current = head;
+		while(current.next != null) {
+			current = current.next;
+		}
+		current.next = newNode;
+		System.out.println("Insertion Successfull");
+		
+	}
+
+	private void insertBegin(int i) {
+		// TODO Auto-generated method stub
+		ListNode newNode = new ListNode(i);
+		newNode.next = head;
+		head = newNode;
+		
+	}
+
+	private int sllLength() {
+		// TODO Auto-generated method stub
+		int count=0;
+		if(head == null) System.out.println("Length : "+0);
+		else {
+		ListNode current = head;
+		while(current != null) {
+			count++;
+			current = current.next;
+		}
+		//System.out.println("Length : "+count);
+		}
+		return count;
+		
+	}
+
+	private void display() {
+		// TODO Auto-generated method stub
+		ListNode current = head;
+		while(current != null) {
+			System.out.print(current.data+" -> ");
+			current = current.next;
+		}
+		System.out.println("null");
+		
+		
+	}
+
+}
